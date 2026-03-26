@@ -5,7 +5,7 @@ const path = require('path');
 
 const app = express();
 const PORT = 5000;
-
+app.listen(PORT, () => console.log("Servidor corriendo en puerto " + PORT));
 // Middleware
 app.use(cors());
 app.use(express.json());
