@@ -16,11 +16,11 @@ require('dotenv').config();
 
 // Luego modifica la configuración de la base de datos:
 const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
+    user: process.env.DBUSER,
+    host: process.env.DBHOST,
+    database: process.env.DBNAME,
+    password: process.env.DBPASSWORD,
+    port: process.env.DBPORT,
 });
 
 // Probar conexión a la base de datos
