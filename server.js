@@ -8,10 +8,20 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// CORS corregido
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"]
+}));
+
 app.use(express.json());
-app.use(express.static(__dirname));
+
+// Servir archivos estáticos
+app.use(express.static(path.join(__dirname)));
+
+// Servir carpeta /images
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Conexión a PostgreSQL en Railway
 const pool = new Pool({
@@ -37,10 +47,8 @@ app.get('/registrar.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'registrar.html'));
 });
 
-// Registrar usuario (vulnerable)
+// Registrar usuario
 app.post('/register', async (req, res) => {
-    console.log('📥 Body recibido:', req.body);
-    
     const { nombre, gmail, contraseña } = req.body;
 
     if (!nombre || !gmail || !contraseña) {
@@ -59,10 +67,8 @@ app.post('/register', async (req, res) => {
 
     try {
         const checkQuery = `SELECT id FROM public.usuario WHERE nombre = '${nombre}' OR gmail = '${gmail}'`;
-        console.log("🔍 Verificando existencia:", checkQuery);
-        
         const existingUser = await pool.query(checkQuery);
-        
+
         if (existingUser.rows.length > 0) {
             return res.status(400).json({
                 success: false,
@@ -73,9 +79,7 @@ app.post('/register', async (req, res) => {
         const insertQuery = `INSERT INTO public.usuario (nombre, gmail, contrasenha) 
                              VALUES ('${nombre}', '${gmail}', '${contraseña}') 
                              RETURNING id, nombre, gmail`;
-        
-        console.log("📝 Insertando usuario:", insertQuery);
-        
+
         const result = await pool.query(insertQuery);
 
         res.status(201).json({
@@ -83,10 +87,8 @@ app.post('/register', async (req, res) => {
             message: 'Usuario registrado exitosamente',
             usuario: result.rows[0]
         });
-        
+
     } catch (error) {
-        console.error('❌ Error en registro:', error);
-        
         res.status(500).json({
             success: false,
             message: 'Error al registrar usuario',
@@ -95,7 +97,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// Login vulnerable
+// Login
 app.post('/login', async (req, res) => {
     const { nombre, contraseña } = req.body;
 
@@ -110,10 +112,7 @@ app.post('/login', async (req, res) => {
         const query = `SELECT id, nombre, contrasenha 
                        FROM public.usuario 
                        WHERE nombre = '${nombre}' AND contrasenha = '${contraseña}'`;
-        
-        console.log("🚨 Consulta vulnerable ejecutada:");
-        console.log(query);
-        
+
         const result = await pool.query(query);
 
         if (result.rows.length > 0) {
@@ -134,8 +133,6 @@ app.post('/login', async (req, res) => {
         }
 
     } catch (error) {
-        console.error('Error en la consulta:', error);
-        
         res.status(500).json({
             success: false,
             message: 'Error en el servidor',
@@ -144,75 +141,6 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// Ver usuarios
-app.get('/usuarios', async (req, res) => {
-    try {
-        const query = 'SELECT id, nombre, gmail FROM public.usuario ORDER BY id';
-        const result = await pool.query(query);
-        
-        res.json({
-            success: true,
-            usuarios: result.rows
-        });
-    } catch (error) {
-        res.status(500).json({ 
-            success: false, 
-            message: 'Error al obtener usuarios',
-            error: error.message 
-        });
-    }
-});
-
-// Ejecutar consultas personalizadas (vulnerable)
-app.post('/query', async (req, res) => {
-    const { sql } = req.body;
-    
-    if (!sql) {
-        return res.status(400).json({
-            success: false,
-            message: 'Se requiere una consulta SQL'
-        });
-    }
-    
-    try {
-        console.log("🚨 Consulta personalizada ejecutada:");
-        console.log(sql);
-        const result = await pool.query(sql);
-        res.json({
-            success: true,
-            rows: result.rows,
-            rowCount: result.rowCount
-        });
-    } catch (error) {
-        console.error('Error en consulta personalizada:', error.message);
-        res.status(500).json({
-            success: false,
-            error: error.message
-        });
-    }
-});
-
-// Info de tabla
-app.get('/tabla-info', async (req, res) => {
-    try {
-        const query = `
-            SELECT column_name, data_type, is_nullable
-            FROM information_schema.columns
-            WHERE table_name = 'usuario'
-            ORDER BY ordinal_position
-        `;
-        const result = await pool.query(query);
-        res.json({
-            success: true,
-            columnas: result.rows
-        });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
-
 app.listen(PORT, () => {
-    console.log("Autor: Yazi");
-    console.log(`🚀 Servidor VULNERABLE corriendo en http://localhost:${PORT}`);
-    console.log("⚠️  Este servidor es INTENCIONALMENTE vulnerable a SQL Injection");
+    console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
 });
