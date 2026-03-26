@@ -27,6 +27,8 @@
     </div>
 
     <script>
+        const API_URL = "https://sqli-production.up.railway.app"; 
+
         document.getElementById('loginForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
@@ -35,7 +37,7 @@
             const messageDiv = document.getElementById('message');
 
             try {
-                const response = await fetch('http://localhost:5000/login', {
+                const response = await fetch(`${API_URL}/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -55,12 +57,9 @@
                     messageDiv.textContent = '¡Login exitoso! Bienvenido ' + data.usuario.nombre;
                     messageDiv.style.color = 'green';
 
-
-                    // Limpiar el formulario
                     document.getElementById('name').value = '';
                     document.getElementById('pass').value = '';
 
-                    // Redirigir después de 2 segundos (opcional)
                     setTimeout(() => {
                         alert('Redirigiendo al dashboard...');
                     }, 2000);
@@ -69,8 +68,6 @@
                     messageDiv.className = 'message error';
                     messageDiv.textContent = data.message;
                     messageDiv.style.color = 'red';
-                    messageDiv.style.fontFamily = 'arial';
-
                 }
 
             } catch (error) {
