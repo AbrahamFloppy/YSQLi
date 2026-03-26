@@ -1,0 +1,165 @@
+.div-log{
+    height: 625px;
+    width: 101.3%;
+    background: url(images/rick-and-morty-en-nave_3840x2400_xtrafondos.com.jpg) no-repeat;
+    background-size: cover;
+    margin-left: -10px;
+    margin-top: -10px;
+}
+
+.login {
+    position: absolute;
+    border: solid 3px rgba(0, 0, 0, 0.719);
+    border-radius: 10px;
+    width: 280px;
+    margin-left: 42%;
+    height: 350px;
+    background-color: transparent;
+    box-shadow: 0 0 68px #000000a1;
+    margin-top: 130px;
+}
+
+.login h2 {
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 32px;
+    color: rgba(229, 234, 238, 0.938);
+    margin-top: 40px;
+    margin-bottom: 0px;
+}
+
+.login p {
+    text-align: start;
+    margin-left: 20px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 17px;
+    color: rgba(0, 0, 0, 0.938);
+    position: absolute;
+    font-weight: bold;
+}
+
+.login input {
+    text-align: start;
+    margin-left: 20px;
+    width: 230px;
+    height: 20px;
+    margin-top: 50px;
+    background-color: transparent;
+    border: 0;
+    border-bottom: solid 2px rgba(0, 0, 0, 0.747);
+    color: rgba(253, 253, 253, 0.945);
+    font-size: 15px;
+    outline: none;
+}
+
+.login button {
+    width: 180px;
+    height: 35px;
+    background: #dacbcb;
+    box-shadow: 0 2px 10px #aca5a5;
+    font-size: 1em;
+    color: black;
+    font-weight: 500;
+    border-radius: 5px;
+    border: none;
+    margin-top: 25px;
+    margin-left: 44px;
+}
+
+#registrar {
+    color: rgb(255, 255, 255);
+    font-size: 12px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    margin-left: 42px;
+    margin-top: 5px;
+}
+
+a {
+    color: red;
+}
+
+/*Registrar*/
+.div-reg {
+    background: url(images/rick-y-morty-como-breaking-bad_3840x2160_xtrafondos.com.jpg) no-repeat;
+    height: 625px;
+    width: 101.3%;
+    background-size: cover;
+    margin-left: -10px;
+    margin-top: -10px;
+}
+
+.regi {
+    position: absolute;
+    border: solid 3px rgba(0, 0, 0, 0.719);
+    border-radius: 10px;
+    width: 280px;
+    margin-left: 42%;
+    margin-top: 130px;
+    height: 370px;
+    background-color: transparent;
+    box-shadow: 0 0 68px #000000a1;
+}
+
+
+.regi h2 {
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 32px;
+    color: rgba(229, 234, 238, 0.938);
+    margin-top: 25px;
+    margin-bottom: 0px;
+}
+
+.regi p {
+    text-align: start;
+    margin-left: 20px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 17px;
+    color: rgba(0, 0, 0, 0.938);
+    position: absolute;
+    font-weight: bold;
+    margin-top: 10px
+}
+
+.regi input {
+    text-align: start;
+    margin-left: 20px;
+    width: 230px;
+    height: 20px;
+    margin-top: 40px;
+    background-color: transparent;
+    border: 0;
+    border-bottom: solid 2px rgba(0, 0, 0, 0.747);
+    color: rgb(0, 0, 0);
+    font-size: 15px;
+    outline: none;
+}
+
+.regi button {
+    width: 180px;
+    height: 35px;
+    background: #dacbcb;
+    box-shadow: 0 2px 10px #aca5a5;
+    font-size: 1em;
+    color: black;
+    font-weight: 500;
+    border-radius: 5px;
+    border: none;
+    margin-top: 20px;
+    margin-left: 44px;
+}
+
+#log {
+    color: rgb(255, 255, 255);
+    font-size: 12px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    margin-left: 42px;
+    margin-top: 5px;
+}
+
+
+#log a {
+    color: rgb(115, 255, 0);
+}

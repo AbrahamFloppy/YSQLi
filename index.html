@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sqli prueba</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="div-log">
+        <div class="login">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <p>Nombre:</p>
+                <input type="text" required placeholder="Ingrese su nombre" id="name">
+                <p>Contraseña:</p>
+                <input type="password" required placeholder="Ingrese su contraseña" id="pass">
+                <br>
+                <button type="submit">Aceptar</button>
+                <p id="registrar">No tienes un usuario <a href="registrar.html">Registrar</a></p>
+            </form>
+            <br>
+            <div id="message" class="message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const nombre = document.getElementById('name').value;
+            const contraseña = document.getElementById('pass').value;
+            const messageDiv = document.getElementById('message');
+
+            try {
+                const response = await fetch('http://localhost:5000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        nombre: nombre,
+                        contraseña: contraseña
+                    })
+                });
+
+                const data = await response.json();
+
+                messageDiv.style.display = 'block';
+
+                if (data.success) {
+                    messageDiv.className = 'message success';
+                    messageDiv.textContent = '¡Login exitoso! Bienvenido ' + data.usuario.nombre;
+                    messageDiv.style.color = 'green';
+
+
+                    // Limpiar el formulario
+                    document.getElementById('name').value = '';
+                    document.getElementById('pass').value = '';
+
+                    // Redirigir después de 2 segundos (opcional)
+                    setTimeout(() => {
+                        alert('Redirigiendo al dashboard...');
+                    }, 2000);
+
+                } else {
+                    messageDiv.className = 'message error';
+                    messageDiv.textContent = data.message;
+                    messageDiv.style.color = 'red';
+                    messageDiv.style.fontFamily = 'arial';
+
+                }
+
+            } catch (error) {
+                messageDiv.style.display = 'block';
+                messageDiv.className = 'message error';
+                messageDiv.style.color = 'red';
+                messageDiv.textContent = 'Error de conexión con el servidor';
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+
+</html>

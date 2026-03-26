@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="div-reg">
+        <div class="regi">
+            <h2>Register</h2>
+            <form id="regiForm">
+                <p>Nombre:</p>
+                <input type="text" required placeholder="Ingrese su nombre" id="name">
+                <p>Gmail:</p>
+                <input type="email" required placeholder="Ingrese su Gmail" id="gmail">
+                <p>Contraseña:</p>
+                <input type="password" required placeholder="Ingrese su contraseña" id="pass">
+                <br>
+                <button type="submit">Registrar</button>
+                <p id="log">Ya tienes un usuario <a href="index.html">Login</a></p>
+            </form>
+            <br>
+            <div id="message" class="message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('regiForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const nombre = document.getElementById('name').value;
+            const gmail = document.getElementById('gmail').value;
+            const contraseña = document.getElementById('pass').value;
+
+            const messageDiv = document.getElementById('message');
+
+            // Limpiar mensaje anterior
+            messageDiv.style.display = 'block';
+            messageDiv.innerHTML = 'Procesando...';
+            messageDiv.style.color = 'blue';
+
+
+            try {
+                const response = await fetch('http://localhost:5000/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        nombre: nombre,
+                        gmail: gmail,
+                        contraseña: contraseña
+                    })
+                });
+
+                const data = await response.json();
+                console.log('Respuesta del servidor:', data);
+
+                if (response.ok && data.success) {
+                    messageDiv.innerHTML = '✅ Usuario registrado exitosamente. Redirigiendo al login...';
+                    messageDiv.style.color = 'rgb(0, 56, 0)';
+                    messageDiv.style.fontSize = '12px';
+                    messageDiv.style.fontFamily = 'Verdana, Geneva, Tahoma, sans-serif';
+                    messageDiv.style.textAlign = 'center';
+                    messageDiv.style.fontWeight = 'bold';
+
+                    // Limpiar formulario
+                    document.getElementById('regiForm').reset();
+
+                    // Redirigir después de 2 segundos
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                } else {
+                    messageDiv.style.color = 'red';
+                    messageDiv.innerHTML = `❌ Error: ${data.message || 'No se pudo registrar el usuario'}`;
+                    if (data.error) {
+                        messageDiv.innerHTML += `<br>Detalle: ${data.error}`;
+                    }
+                }
+            } catch (error) {
+                console.error('Error de conexión:', error);
+                messageDiv.style.color = 'red';
+                messageDiv.innerHTML = '❌ Error de conexión con el servidor. Asegúrate de que el servidor esté corriendo en http://localhost:5000';
+            }
+        });
+    </script>
+</body>
+
+</html>
