@@ -66,8 +66,8 @@ app.post('/register', async (req, res) => {
     }
 
     try {
-        const checkQuery = `SELECT id FROM public.usuario WHERE nombre = '${nombre}' OR gmail = '${gmail}'`;
-        const existingUser = await pool.query(checkQuery);
+        const checkQuery = `SELECT id FROM public.usuario WHERE nombre = $1 OR gmail = $2`;
+        const existingUser = await pool.query(checkQuery, [nombre, gmail]);
 
         if (existingUser.rows.length > 0) {
             return res.status(400).json({
@@ -76,11 +76,12 @@ app.post('/register', async (req, res) => {
             });
         }
 
-        const insertQuery = `INSERT INTO public.usuario (nombre, gmail, contrasenha) 
-                             VALUES ('${nombre}', '${gmail}', '${contraseña}') 
-                             RETURNING id, nombre, gmail`;
-
-        const result = await pool.query(insertQuery);
+        const insertQuery = `
+            INSERT INTO public.usuario (nombre, gmail, contrasenha)
+            VALUES ($1, $2, $3)
+            RETURNING id, nombre, gmail
+        `;
+        const result = await pool.query(insertQuery, [nombre, gmail, contraseña]);
 
         res.status(201).json({
             success: true,
@@ -96,6 +97,7 @@ app.post('/register', async (req, res) => {
         });
     }
 });
+
 
 // Login
 app.post('/login', async (req, res) => {
